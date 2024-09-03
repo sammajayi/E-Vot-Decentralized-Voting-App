@@ -4,9 +4,9 @@ const trustedForwarder = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c";
 
 const VotingERC2771Module = buildModule("VotingERC2771Module", (m) => {
 
-    const stake = m.contract("VotingERC2771", [trustedForwarder]);
+    const vote = m.contract("VotingERC2771", [trustedForwarder]);
 
-    return { stake };
+    return { vote };
 });
 
 export default VotingERC2771Module;
