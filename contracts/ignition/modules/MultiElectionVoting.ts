@@ -11,4 +11,4 @@ const MultiElectionVotingModule = buildModule("MultiElectionVotingModule", (m) =
 
 export default MultiElectionVotingModule;
 
-// Deployed MultiElectionVoting: 0x184a253699B4D3a26A4EE09608Bc9400F965d2Fb
+// Deployed MultiElectionVoting: 0x835022F09805bEEa6CE969e0cc487F7769554e7f
