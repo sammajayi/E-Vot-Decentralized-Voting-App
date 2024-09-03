@@ -8,6 +8,56 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+
+
+
+input[type="file"] {
+  display: none;
+}
+
+
+.uploadNIN {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4CAF50; 
+  color: black;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+.uploadNIN {
+  background-image: url('../../public/assets/upload.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 122px;
+  width:446px;
+}
+
+
+.uploadNIN {
+  background-color: white;
+  opacity: 0.9;
+}
+
+input[type="number"]:::-webkit-inner-spin-button,
+input[type="number"]:::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+ -moz-appearance: textfield;
+}
+
+a:active{
+  text-decoration: underline;
+  color:#9747FF;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
