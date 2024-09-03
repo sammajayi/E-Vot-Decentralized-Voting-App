@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "./abi";
 
+
 const relay = new GelatoRelay();
 const GELATO_API = import.meta.env.VITE_GELATO_API_KEY;
 const now = new Date();
