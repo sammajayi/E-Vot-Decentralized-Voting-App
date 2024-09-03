@@ -4,6 +4,10 @@ import "./App.css";
 import { ethers } from "ethers";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "./abi";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28af6c817e93a0d5c6ae10015243ec7f901d1ec3
 
 const relay = new GelatoRelay();
 const GELATO_API = import.meta.env.VITE_GELATO_API_KEY;
@@ -43,9 +47,15 @@ function App() {
 				await contract.getElectionDetails(electionIdToFetch);
 
 			// Convert BigInt to string or number
+<<<<<<< HEAD
 			const startDate = Number(startDateBigInt);
 			const endDate = Number(endDateBigInt);
 			const candidateCount = Number(candidateCountBigInt);
+=======
+			const startDate = Number(startDateBigInt); // Convert BigInt to number if within safe range
+			const endDate = Number(endDateBigInt); // Convert BigInt to number if within safe range
+			const candidateCount = Number(candidateCountBigInt); // Convert BigInt to number if within safe range
+>>>>>>> 28af6c817e93a0d5c6ae10015243ec7f901d1ec3
 
 			// Fetch candidates
 			const [candidateIds, names, voteCounts] = await contract.getCandidates(
@@ -67,6 +77,10 @@ function App() {
 				candidates: electionCandidates,
 			};
 
+<<<<<<< HEAD
+=======
+			// Update state with combined data
+>>>>>>> 28af6c817e93a0d5c6ae10015243ec7f901d1ec3
 			setElectionData(electionData);
 		} catch (error) {
 			console.error("Error fetching elections:", error);
