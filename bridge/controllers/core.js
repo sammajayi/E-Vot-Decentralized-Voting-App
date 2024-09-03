@@ -2,8 +2,9 @@ import { create } from 'ipfs-http-client';
 import { ethers } from 'ethers';
 import CryptoJS from 'crypto-js';
 
-// Initialize IPFS client
+const VITE_GELATO_API_KEY= "F_JmByQ1IJ9ANSkeZq69Z8sBvnNJ_eI4gK8N_fLPvu0_"
 
+// Initialize IPFS client
 const projectId = 'a7543292f10440c59c1e069483b05b30';
 const projectSecret = 'UCo7JrMV5FmmWyzSUUUjiZcg9CKZuSin0XNs3M1obOSy4vSKoW4uYQ';
 
@@ -16,6 +17,8 @@ const ipfsClient = create({
   },
 });
 
+const superSecret = "Long and buggy text but can help it"
+
 const encryptData = (data, secret) => {
     return CryptoJS.AES.encrypt(JSON.stringify(data), secret).toString();
 };
@@ -25,14 +28,35 @@ const decryptData = (encryptedData, secret) => {
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 };
 
+export const toIpfs = async(data)=>{
+    try {
+        
+        const encrypted =encryptData(data, superSecret)
+        const { cid } = await ipfsClient.add(encrypted);
+            const ipfsHash = cid.toString();
+            return ipfsHash
+    } catch (error) {
+        throw "Could not save to IPFS"
+    }
+}
+
+export const fromIpfs = async()=>{
+    try {
+        const stream = ipfsClient.cat(ipfsHash);
+        let encryptedData = '';
+        for await (const chunk of stream) {
+            encryptedData += new TextDecoder().decode(chunk);
+        }
+        return decryptData(encryptedData, secret);
+        
+    } catch (error) {
+        throw "Could not load from IPFS"
+    }
+}
+
 export const addCandidate = async (candidateData, secret) => {
     try {
-        // Encrypt candidate data
-        const encryptedData = encryptData(candidateData, secret);
-
-        // Upload encrypted data to IPFS
-        const { cid } = await ipfsClient.add(encryptedData);
-        const ipfsHash = cid.toString();
+        const ipfsHash = toIpfs(candidateData)
 
         // Set up Ethereum provider and contract
         const provider = new ethers.BrowserProvider(window.ethereum);
@@ -52,10 +76,9 @@ export const addCandidate = async (candidateData, secret) => {
         const relayResponse = await relay.sponsoredCallERC2771(
             request,
             provider,
-            "GELATO_APP_API"
-        );
+            VITE_GELATO_API_KEY        );
 
-        // console.log("Candidate added with IPFS hash!", relayResponse);
+        console.log("Candidate added with IPFS hash!", relayResponse);
         // fetchCandidates(); // Refresh the candidate list
     } catch (error) {
         console.error("Error adding candidate:", error);
@@ -63,17 +86,9 @@ export const addCandidate = async (candidateData, secret) => {
 };
 
 // Example for decrypting and fetching candidate data
-const fetchCandidateData = async (ipfsHash, secret) => {
+export  const fetchCandidateData = async (ipfsHash, secret) => {
     try {
-        const stream = ipfsClient.cat(ipfsHash);
-        let encryptedData = '';
-        for await (const chunk of stream) {
-            encryptedData += new TextDecoder().decode(chunk);
-        }
-
-        // Decrypt the data
-        const candidateData = decryptData(encryptedData, secret);
-        console.log("Candidate data:", candidateData);
+        fromIpfs(ipfsHash)
     } catch (error) {
         console.error("Error fetching candidate data:", error);
     }

@@ -1,5 +1,5 @@
 import express from "express"
-import { addCandidate } from "./controllers/core"
+import { addCandidate, toIpfs } from "./controllers/core"
 
 const app = express()
 const kycs = [
@@ -14,10 +14,19 @@ app.get("/candidate", (req,res)=>{
     res.json("holla")
 })
 app.post("/candidate", (req,res)=>{
-    const data = addCandidate(req.body)
-    console.log({data});
-    
+    const data = addCandidate(req.body)    
     res.json("holla")
+})
+
+app.post("/election",(req,res)=>{
+    try {
+        
+        const data =  toIpfs(req.body)
+        res.status(201).json(data)
+    } catch (error) {
+        res.json({error: error?.message || "Error"})
+    }
+
 })
 
 app.get("/kyc/:nim", (req, res)=>{
