@@ -86,16 +86,19 @@ export default function Onboard() {
                 <img src="/assets/Logo.png" alt="logo" />
             </div>
 
-            <div className="flex ml-20 ">
-                <ul className="flex ">
-                <li className="px-8 font-medium">
-                    <Link href="/">Dashboard</Link>
+            <div className="flex ml-20">
+                <ul className="flex gap-16">
+                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="dashboard">
+                    <Link className="" href="/">Dashboard</Link>
                 </li>
-                <li className="px-8 font-medium">
-                    <Link href="/">Vote</Link>
+                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="elections">
+                    <Link className="" href="/elections">Vote</Link>
                 </li>
-                <li className="px-8 font-medium">
-                    <Link href="/">KYC</Link>
+                {/* <li className="px-8  nav-linksfont-medium">
+                    <Link hre className=""f="/kyc">KYC</Link>
+                </li> */}
+                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="addElection">
+                    <Link className="" href="/addElection">Create Election</Link>
                 </li>
                 </ul>
             </div>
