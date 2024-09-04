@@ -2,11 +2,16 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import Web3 from "web3";
+// import { arbitrumSepolia, celo, celoAlfajores, liskSepolia } from "wagmi/chains";
+
+
 // import { connectWallet } from './web3modal';
 import {
     useWeb3ModalTheme,
     createWeb3Modal,
     defaultConfig,
+    useWeb3ModalAccount,
+    useWeb3ModalProvider,
   } from 'web3modal-web3js/react';
 
 
@@ -26,6 +31,20 @@ import {
       explorerUrl: 'https://arbiscan.io',
       rpcUrl: 'https://arb1.arbitrum.io/rpc',
     },
+    {
+      chainId: 421_614,
+      name: 'Arbitrum Sepolia',
+      currency: 'ETH',
+      explorerUrl: 'https://sepolia.arbiscan.io',
+      rpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+    },
+    {
+      chainId: 4202,
+      name: 'Lisk Sepolia',
+      currency: 'ETH',
+      explorerUrl: 'https://sepolia-blockscout.lisk.com',
+      rpcUrl: 'https://rpc.sepolia-api.lisk.com',
+    },
   ];
   
   const web3Config = defaultConfig({
@@ -43,6 +62,7 @@ import {
   createWeb3Modal({
     web3Config,
     chains,
+    // chains: [celo, celoAlfajores, arbitrumSepolia, liskSepolia],
     projectId,
     enableAnalytics: true,
     themeMode: 'light',
@@ -54,6 +74,10 @@ import {
 
 export default function Onboard() {
     const btnRef = useRef(null);
+
+    const { address, chainId, isConnected } = useWeb3ModalAccount();
+    const { walletProvider } = useWeb3ModalProvider();
+    console.log(address)
 
     return (
         <header>
