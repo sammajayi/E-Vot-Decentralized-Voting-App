@@ -27,7 +27,7 @@ const now = new Date();
 now.setMinutes(now.getMinutes() + 5); // Add 5 minutes
 const minDateTime = now.toISOString().slice(0, 16);
 
-export default function Onboard() {
+export default function AddElection() {
 	const [open, setOpen] = useState(false);
 	const [newElection, setNewElection] = useState({
 		title: "",

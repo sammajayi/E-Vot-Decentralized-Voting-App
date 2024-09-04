@@ -26,9 +26,9 @@ const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
 const now = new Date();
 
 
-export default function AddCandidate() {
-  const [newCandidate, setNewCandidate] = useState("");
-	const [electionIdForCandidate, setElectionIdForCandidate] = useState("");
+export default function AccreditVoter() {
+  const [voterAddress, setVoterAddress] = useState("");
+	const [electionIdForVoter, setelectionIdForVoter] = useState("");
   const [open, setOpen] = useState(false);
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false);
@@ -46,41 +46,41 @@ const handleGoback = () => {
   // }
 }
 
-const addCandidate = async (e) => {
-  e.preventDefault();
+const accreditVoter = async (e) => {
+  e.preventDefault()
   if(isConnected) {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
-  
-      const data = await contract.addCandidate.populateTransaction(
-        electionIdForCandidate,
-        newCandidate
-      );
-  
-      const user = await signer.getAddress();
-      const request = {
-        chainId: (await provider.getNetwork()).chainId,
-        target: contractAddress,
-        data: data.data,
-        user: user,
-      };
-  
-      const relayResponse = await relay.sponsoredCallERC2771(
-        request,
-        provider,
-        GELATO_API
-      );
-  
-      console.log("Candidate added!", relayResponse);
-    } catch (error) {
-      console.error("Error adding candidate:", error);
-    }
-  } else {
-    return toast.error("Please connect your wallet");
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+
+    const data = await contract.accreditVoter.populateTransaction(
+      electionIdForVoter,
+      voterAddress
+    );
+
+    const user = await signer.getAddress();
+    const request = {
+      chainId: (await provider.getNetwork()).chainId,
+      target: contractAddress,
+      data: data.data,
+      user: user,
+    };
+
+    const relayResponse = await relay.sponsoredCallERC2771(
+      request,
+      provider,
+      GELATO_API
+    );
+
+    console.log("Voter accredited!", relayResponse);
+  } catch (error) {
+    console.error("Error accrediting voter:", error);
   }
+} else {
+  return toast.error("Please connect your wallet");
 }
+};
 
 
   return (
@@ -88,7 +88,7 @@ const addCandidate = async (e) => {
       <div className="w-[34rem] h-[79vh] border rounded-lg p-6 py-10">
         <div className="flex flex-col justify-start items-center align-middle h-[69vh] overflow-scroll">
         <h2 className="text-xl font-bold non-italic justify-center items-center text-center pb-2 text-wrap form-item">
-         Add Candidate
+         Accredit Voter
         </h2>
         <p className="font-normal text-slate-400 text-center form-item">
           Fill the input fields below.
@@ -102,21 +102,21 @@ const addCandidate = async (e) => {
               type="text"
               placeholder="Input election id"
               id="id"
-              value={electionIdForCandidate}
-					    onChange={(e) => setElectionIdForCandidate(e.target.value)}
+              value={electionIdForVoter}
+					    onChange={(e) => setelectionIdForVoter(e.target.value)}
               className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
             />
           </div>
           <div className=" form-item mt-4">
             <label htmlFor="" className="block pb-1.5 font-medium">
-              Candidate Name
+              Voter Address
             </label>
             <input
               type="text"
-              placeholder="Input candidate name"
-              id="name"
-              value={newCandidate}
-					    onChange={(e) => setNewCandidate(e.target.value)}
+              placeholder="Input voter address"
+              id="address"
+              value={voterAddress}
+					    onChange={(e) => setVoterAddress(e.target.value)}
               className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
             />
           </div>
@@ -125,7 +125,7 @@ const addCandidate = async (e) => {
             <button onClick={handleGoback} className="border-[#8F95B1] border text-black w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
               Cancel
             </button>
-            <button onClick={addCandidate} className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
+            <button onClick={accreditVoter} className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
             Proceed
             </button>
           </div>
