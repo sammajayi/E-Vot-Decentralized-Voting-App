@@ -83,6 +83,14 @@ a:active{
   .shadow-made {
     box-shadow: 2px 2px 4px 2px rgb(0 0 0 / 0.1);
   }
+
+  .home-bg {
+    background-image: url('../../public/assets/hero-bg.png');
+    background-repeat: no-repeat;
+    height: 80vh;
+    /* background-color: red; */
+  }
+
   .form-item {
     opacity: 0;
     transform: translateY(100px);
@@ -134,23 +142,15 @@ a:active{
     animation-delay: 1.5s;
   }
 
-  /* Styling the w3m-button component */
-  w3m-button::part(button) {
-    background-color: #ff6347 !important; /* Set background color */
-    color: white; /* Set text color */
-    padding: 10px 20px; /* Set padding */
-    border-radius: 5px; /* Set border radius */
-    font-size: 16px; /* Set font size */
-    font-weight: bold; /* Set font weight */
-  }
-  
-  w3m-button::part(icon) {
-    margin-right: 8px; /* Add space between icon and text */
+  .nav-links {
+    /* background-color: red; */
+    padding: 1vh 0;
   }
 
-  w3m-button w3m-connect-button wui-connect-button::part(button) {
-    background-color: #9747FF !important;
-    color: white !important;
+  .nav-links:active {
+    border-bottom: 2px #8F96A1;
+    color: #8F96A1;
+    /* padding-bottom: 2vh; */
   }
 
   /* button

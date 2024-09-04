@@ -82,7 +82,7 @@ export default function ElectionDetails() {
                     </p>
                     <p className="text-[15px] md:text-[15px] font-light pb-8 md:px-6 font-[NuelisAlt]">{data.desc}</p>
                 </div>
-                <button onClick={() => handleSetOpen(data)} className="space-x-4 mx-6 mb-6 bg-[#9747FF] text-white rounded-lg w-[9rem] h-[2.5rem] transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
+                <button onClick={() => handleSetOpen(data)} className="space-x-4 mx-6 mb-6 bg-[#5773fb] text-white rounded-lg w-[9rem] h-[2.5rem] transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
                 Vote
                 </button>
             </div>
@@ -107,7 +107,7 @@ export default function ElectionDetails() {
                         </p>
                         <p className="text-[15px] md:text-[15px] font-light pb-8 md:px-6 font-[NuelisAlt]">{data.desc}</p>
                     </div>
-                    <button onClick={() => handleSetOpen(data)} className="space-x-4 mx-6 mb-6 bg-[#9747FF] text-white rounded-lg w-[9rem] h-[2.5rem] transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
+                    <button onClick={() => handleSetOpen(data)} className="space-x-4 mx-6 mb-6 bg-[#5773fb] text-white rounded-lg w-[9rem] h-[2.5rem] transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300">
                     Vote
                     </button>
                 </div>
