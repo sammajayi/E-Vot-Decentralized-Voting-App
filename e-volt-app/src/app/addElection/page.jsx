@@ -40,43 +40,79 @@ export default function Onboard() {
 
 	async function addElection(e) {
 		e.preventDefault();
-    const provider = new ethers.BrowserProvider(window.ethereum);
+    if(isConnected) {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+  
+        const data = await contract.createElection.populateTransaction(
+          newElection.title,
+          Math.floor(new Date(newElection.startDate).getTime() / 1000),
+          Math.floor(new Date(newElection.endDate).getTime() / 1000)
+        );
+  
+        const user = await signer.getAddress();
+        const request = {
+          chainId: (await provider.getNetwork()).chainId,
+          target: contractAddress,
+          data: data.data,
+          user: user,
+        };
+  
+        const relayResponse = await relay.sponsoredCallERC2771(
+          request,
+          provider,
+          GELATO_API
+        );
+  
+        console.log("Election created!", relayResponse);
+      } catch (error) {
+        console.error("Error creating election:", error);
+      }
+    } else {
+      return toast.error("Please connect your wallet");
+    }
+    // const web3 = new Web3(window.ethereum);
+    // const provider = web3.currentProvider;
+    // // const provider = new Web3(window.ethereum);
+    // // await window.ethereum.enable();
    
-		try {
-			if (!isConnected) {
-				return toast.error("Please connect your wallet");
-			}
-			const web3 = new Web3({
-				provider: walletProvider,
-				config: { defaultNetworkId: chainId },
-			});
+		// try {
+		// 	if (!isConnected) {
+		// 		return toast.error("Please connect your wallet");
+		// 	}
+		// 	const web3 = new Web3({
+		// 		provider: walletProvider,
+		// 		config: { defaultNetworkId: chainId },
+		// 	});
       
 
-			const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
-			const data = contract.methods
-				.createElection(
-					newElection.title,
-					Math.floor(new Date(newElection.startDate).getTime() / 1000),
-					Math.floor(new Date(newElection.endDate).getTime() / 1000)
-				)
-				.encodeABI();
-			const request = {
-				chainId,
-				target: contractAddress,
-				data: data.data,
-				user: address,
-			};
+		// 	const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
+		// 	const data = contract.methods
+		// 		.createElection(
+		// 			newElection.title,
+		// 			Math.floor(new Date(newElection.startDate).getTime() / 1000),
+		// 			Math.floor(new Date(newElection.endDate).getTime() / 1000)
+		// 		)
+		// 		.encodeABI();
+		// 	const request = {
+		// 		chainId,
+		// 		target: contractAddress,
+		// 		data: data.data,
+		// 		user: address,
+		// 	};
 
-			const relayResponse = await relay.sponsoredCallERC2771(
-				request,
-				provider,
-				GELATO_API
-			);
+		// 	const relayResponse = await relay.sponsoredCallERC2771(
+		// 		request,
+		// 		provider,
+		// 		GELATO_API
+		// 	);
 
-			console.log("Election created!", relayResponse);
-		} catch (error) {
-			console.log(error)
-		}
+		// 	console.log("Election created!", relayResponse);
+		// } catch (error) {
+		// 	console.log(error)
+		// }
 
 		// const balance = await contract.methods.balanceOf(address).call();
 		// const name = await contract.methods.name().call();

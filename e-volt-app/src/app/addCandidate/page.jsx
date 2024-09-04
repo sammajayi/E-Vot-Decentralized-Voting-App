@@ -1,16 +1,38 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Web3 } from "web3";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	DialogTitle,
+} from "@headlessui/react";
 import SuccessModal from "@/components/SuccessModal";
+import { GelatoRelay } from "@gelatonetwork/relay-sdk";
+import { CONTRACT_ABI } from "@/constants/abi";
+import { toast } from "react-toastify";
+import {
+	useWeb3ModalAccount,
+	useWeb3ModalProvider,
+} from "web3modal-web3js/react";
+import { ethers } from "ethers";
+
+const contractAddress = "0x5c2fa0a4bA3878028C83127B62e1279FEc3673bc";
+
+const relay = new GelatoRelay();
+const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
+const now = new Date();
 
 
 export default function Onboard() {
+  const [newCandidate, setNewCandidate] = useState("");
+	const [electionIdForCandidate, setElectionIdForCandidate] = useState("");
   const [open, setOpen] = useState(false);
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false);
+	const { address, chainId, isConnected } = useWeb3ModalAccount();
 
 const handleClick = () => {
  const image = document.getElementsByClassName("uploadNIN");
@@ -22,6 +44,42 @@ const handleGoback = () => {
   // if (isMounted) {
     router.back();
   // }
+}
+
+const addCandidate = async (e) => {
+  e.preventDefault();
+  if(isConnected) {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+  
+      const data = await contract.addCandidate.populateTransaction(
+        electionIdForCandidate,
+        newCandidate
+      );
+  
+      const user = await signer.getAddress();
+      const request = {
+        chainId: (await provider.getNetwork()).chainId,
+        target: contractAddress,
+        data: data.data,
+        user: user,
+      };
+  
+      const relayResponse = await relay.sponsoredCallERC2771(
+        request,
+        provider,
+        GELATO_API
+      );
+  
+      console.log("Candidate added!", relayResponse);
+    } catch (error) {
+      console.error("Error adding candidate:", error);
+    }
+  } else {
+    return toast.error("Please connect your wallet");
+  }
 }
 
 
@@ -44,6 +102,8 @@ const handleGoback = () => {
               type="text"
               placeholder="Input election id"
               id="id"
+              value={electionIdForCandidate}
+					    onChange={(e) => setElectionIdForCandidate(e.target.value)}
               className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
             />
           </div>
@@ -55,6 +115,8 @@ const handleGoback = () => {
               type="text"
               placeholder="Input candidate name"
               id="name"
+              value={newCandidate}
+					    onChange={(e) => setNewCandidate(e.target.value)}
               className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
             />
           </div>
@@ -63,7 +125,7 @@ const handleGoback = () => {
             <button onClick={handleGoback} className="border-[#8F95B1] border text-black w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
               Cancel
             </button>
-            <button className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
+            <button onClick={addCandidate} className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
             <Link href="/elections">Proceed</Link>
             </button>
           </div>
