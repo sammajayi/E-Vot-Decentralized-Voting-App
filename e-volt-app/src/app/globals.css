@@ -134,6 +134,29 @@ a:active{
     animation-delay: 1.5s;
   }
 
+  /* Styling the w3m-button component */
+  w3m-button::part(button) {
+    background-color: #ff6347 !important; /* Set background color */
+    color: white; /* Set text color */
+    padding: 10px 20px; /* Set padding */
+    border-radius: 5px; /* Set border radius */
+    font-size: 16px; /* Set font size */
+    font-weight: bold; /* Set font weight */
+  }
+  
+  w3m-button::part(icon) {
+    margin-right: 8px; /* Add space between icon and text */
+  }
+
+  w3m-button w3m-connect-button wui-connect-button::part(button) {
+    background-color: #9747FF !important;
+    color: white !important;
+  }
+
+  /* button
+  /html/body/div[1]/header/navbar/div[3]/w3m-button//w3m-connect-button//wui-connect-button//button
+   */
+
   @keyframes slideIn {
     to {
       opacity: 1;

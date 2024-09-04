@@ -1,59 +1,20 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import Web3 from "web3";
-// import { connectWallet } from './web3modal';
-import {
-    useWeb3ModalTheme,
-    createWeb3Modal,
-    defaultConfig,
-  } from 'web3modal-web3js/react';
-
-
-  const projectId = "a6a91196516cd2b211e9d6bebf8a5c13"
-  const chains = [
-    {
-      chainId: 1,
-      name: 'Ethereum',
-      currency: 'ETH',
-      explorerUrl: 'https://etherscan.io',
-      rpcUrl: 'https://cloudflare-eth.com',
-    },
-    {
-      chainId: 42161,
-      name: 'Arbitrum',
-      currency: 'ETH',
-      explorerUrl: 'https://arbiscan.io',
-      rpcUrl: 'https://arb1.arbitrum.io/rpc',
-    },
-  ];
-  
-  const web3Config = defaultConfig({
-    metadata: {
-      name: 'Web3Modal',
-      description: 'Web3Modal Laboratory',
-      url: 'https://web3modal.com',
-      icons: ['https://avatars.githubusercontent.com/u/37784886'],
-    },
-    defaultChainId: 1,
-    rpcUrl: 'https://cloudflare-eth.com',
-  });
-  
-  // 3. Create modal
-  createWeb3Modal({
-    web3Config,
-    chains,
-    projectId,
-    enableAnalytics: true,
-    themeMode: 'light',
-    themeVariables: {
-      '--w3m-color-mix': '#00DCFF',
-      '--w3m-color-mix-strength': 20,
-    },
-  });
+import {Web3} from "web3";
 
 export default function Onboard() {
     const btnRef = useRef(null);
+
+    // connect to injected provider
+    const web3 = new Web3(window.ethereum)
+
+    // ask the user to connect the account
+    async function connect(){
+      const accounts = await web3.eth.requestAccounts()
+      console.log(accounts)
+
+    }
 
     return (
         <header>

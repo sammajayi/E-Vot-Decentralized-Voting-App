@@ -29,7 +29,8 @@ export default function SuccessModal ({onCloseModal}) {
                             <DialogTitle as="h3" className="text-[20px] font-semibold leading-6 text-gray-900">
                                 Hooray!!!
                             </DialogTitle>
-                            <div className="mt-2">
+                            <div className="mt-2 flex flex-col justify-center items-center">
+                                <img src="./assets/success.png" alt="" />
                                 <p className="text-sm text-gray-500">
                                 Congratulations! Your kyc details have been successfully collected and attached to your address
                                 </p>
