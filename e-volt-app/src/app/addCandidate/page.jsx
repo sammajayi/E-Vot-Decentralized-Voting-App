@@ -30,7 +30,7 @@ const handleGoback = () => {
       <div className="w-[34rem] h-[79vh] border rounded-lg p-6 py-10">
         <div className="flex flex-col justify-start items-center align-middle h-[69vh] overflow-scroll">
         <h2 className="text-xl font-bold non-italic justify-center items-center text-center pb-2 text-wrap form-item">
-          Create An Election.
+         Add Candidate
         </h2>
         <p className="font-normal text-slate-400 text-center form-item">
           Fill the input fields below.

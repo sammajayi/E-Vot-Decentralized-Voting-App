@@ -1,12 +1,27 @@
 "use client"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { Web3 } from "web3";
+import { useWeb3ModalAccount } from "web3modal-web3js/react";
 
 
 export default function HOME() {
+    const router = useRouter()
+    const { address, chainId, isConnected } = useWeb3ModalAccount();
+
   // check if Metamask is installed
   // if installed, initialize Web3JS
   // request user to connect to Metamask
+
+  const handleCheckConnect =() =>{
+    if (isConnected) {
+        router.push("/kyc");
+    } else {
+        toast.error("Please connect your wallet");
+    }
+
+  }
 
   return (
     <div className="">
@@ -63,11 +78,11 @@ export default function HOME() {
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center w-full">
-                <Link href="/kyc">
-                <button className="space-x-4 bg-[#5773fb] text-white rounded-lg w-auto py-4 px-6 my-10 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
+                {/* <Link > */}
+                <button onClick={handleCheckConnect} className="space-x-4 bg-[#5773fb] text-white rounded-lg w-auto py-4 px-6 my-10 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
                     Complete KYC To Get Started
                 </button>
-                </Link>
+                {/* </Link> */}
             </div>
         </div>
     </div>

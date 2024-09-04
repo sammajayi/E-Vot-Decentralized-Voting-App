@@ -1,5 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,6 +18,7 @@ export default function RootLayout({ children }) {
 				<div className="mb-[10vh]">
 					<Navbar />
 				</div>
+				<ToastContainer/>
 				<div className="overflow-scroll pt-[1vh] max-h-[90vh]">{children}</div>
 			</body>
 		</html>
