@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-	title: "E-Volt",
+	title: "E-vot",
 	description: "A decentralized voting platform",
 };
 

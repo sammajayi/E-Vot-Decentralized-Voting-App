@@ -106,7 +106,7 @@ const handleClick = () => {
 
         {/* voting time */}
         <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
-            <SuccessModal onCloseModal={() => setOpen(false)} />
+            <SuccessModal btnText="See Live Elections" successMsg="Congratulations! Your kyc details have been successfully collected and attached to your address" routePath="/elections" />
         </Dialog>
     </main>
   );

@@ -1,14 +1,17 @@
 'use client'
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 
-export default function SuccessModal ({onCloseModal}) {
+export default function SuccessModal ({routePath, btnText, successMsg}) {
     const [loading, setLoading] = useState(false);
     const [voteSuccessful, setVoteSuccessful] = useState(false);
-    const onClose = () => {
-        console.log("here");
+    const router = useRouter()
+
+    const handleRouting = () => {
+        router.push(routePath)
     }
 
     return (
@@ -25,30 +28,29 @@ export default function SuccessModal ({onCloseModal}) {
             >
                 <div className="bg-white px-4 py-16">
                     <div className="sm:flex sm:items-start">
-                        <div className="mt-3 text-center sm:ml-4 sm:mt-0">
-                            <DialogTitle as="h3" className="text-[20px] font-semibold leading-6 text-gray-900">
+                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 flex flex-col justify-center items-center">
+                            <img src="./assets/success.png" alt="" />
+                            <DialogTitle as="h3" className="text-[20px] font-semibold leading-6 text-gray-900 mt-8">
                                 Hooray!!!
                             </DialogTitle>
                             <div className="mt-2 flex flex-col justify-center items-center">
-                                <img src="./assets/success.png" alt="" />
                                 <p className="text-sm text-gray-500">
-                                Congratulations! Your kyc details have been successfully collected and attached to your address
+                                {successMsg}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div> 
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <Link href="/elections">
+                    
                     <button
                         type="button"
                         data-autofocus
-                        onClick={onCloseModal}
+                        onClick={handleRouting}
                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
                     >
-                        Return to Dashboard
+                       {btnText}
                     </button>
-                    </Link>
                 </div>
             </DialogPanel>
             </div>

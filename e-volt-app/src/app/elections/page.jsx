@@ -11,7 +11,7 @@ export default function Elections() {
             <p className=" form-item">Vote to make your voice heard</p>
         </div>
         <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center border rounded-lg p-10 gap-14 mt-10 form-item">
-            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[47%] form-item">
+            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[45%] form-item">
                 <p className="text-[24px] font-medium form-item">Unilag Student Union Representative</p>
                 <p className="text-sm font-normal text-[#8F96A1] form-item">Election running from - 1st September to 12th September, 2024</p>
                 <Link href="/election-details">
@@ -20,7 +20,7 @@ export default function Elections() {
                 </button>
                 </Link>
             </div>
-            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[47%] form-item">
+            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[45%] form-item">
                 <p className="text-[24px] font-medium form-item">LASU Student Union Representative</p>
                 <p className="text-sm font-normal text-[#8F96A1] form-item">Election running from - 4th September to 20th September, 2024</p>
                 <Link href="/election-details">
@@ -29,7 +29,7 @@ export default function Elections() {
                 </button>
                 </Link>
             </div>
-            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[47%] form-item">
+            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[45%] form-item">
                 <p className="text-[24px] font-medium form-item">FUTO Student Union Representative</p>
                 <p className="text-sm font-normal text-[#8F96A1] form-item">Election running from - 3rd September to 19th September, 2024</p>
                 <Link href="/election-details">
@@ -38,7 +38,7 @@ export default function Elections() {
                 </button>
                 </Link>
             </div>
-            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[47%] form-item">
+            <div className="shadow-made rounded-lg flex flex-col justify-center items-center py-12 px-16 text-center basis-[45%] form-item">
                 <p className="text-[24px] font-medium form-item">Uniben Student Union Representative</p>
                 <p className="text-sm font-normal text-[#8F96A1] form-item">Election running from - 3rd September to 15th September, 2024</p>
                 <Link href="/election-details">

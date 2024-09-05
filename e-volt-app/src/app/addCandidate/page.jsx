@@ -19,7 +19,7 @@ import {
 } from "web3modal-web3js/react";
 import { ethers } from "ethers";
 
-const contractAddress = "0x5c2fa0a4bA3878028C83127B62e1279FEc3673bc";
+const contractAddress = "0x173A35de308c2B00B19D5102e4068BbD338fAD32";
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
@@ -30,6 +30,7 @@ export default function AddCandidate() {
   const [newCandidate, setNewCandidate] = useState("");
 	const [electionIdForCandidate, setElectionIdForCandidate] = useState("");
   const [open, setOpen] = useState(false);
+	const [loading, setloading] = useState(false);
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false);
 	const { address, chainId, isConnected } = useWeb3ModalAccount();
@@ -50,6 +51,7 @@ const addCandidate = async (e) => {
   e.preventDefault();
   if(isConnected) {
     try {
+      setloading(true)
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
@@ -72,10 +74,12 @@ const addCandidate = async (e) => {
         provider,
         GELATO_API
       );
-  
+      setloading(false)
+      setOpen(true)
       console.log("Candidate added!", relayResponse);
     } catch (error) {
-      console.error("Error adding candidate:", error);
+      setloading(false)
+      return toast.error("Error adding candidate");
     }
   } else {
     return toast.error("Please connect your wallet");
@@ -125,8 +129,12 @@ const addCandidate = async (e) => {
             <button onClick={handleGoback} className="border-[#8F95B1] border text-black w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
               Cancel
             </button>
-            <button onClick={addCandidate} className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
-            Proceed
+            <button onClick={addCandidate} className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 flex items-center justify-center">
+            {loading ? <div className="animate-spin h-[30px] rounded-full border-[#fff] border-4 border-b-[#000000] w-[30px] mr-3" viewBox="0 0 24 24">
+								
+								</div> : 
+								<span>Proceed</span>
+								}
             </button>
           </div>
         </form>
@@ -135,7 +143,7 @@ const addCandidate = async (e) => {
 
         {/* voting time */}
         <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
-            <SuccessModal onCloseModal={() => setOpen(false)} />
+            <SuccessModal btnText="Accredit Voter" successMsg="Congratulations! You have successfully added a candidate to contest in a transparent election" routePath="/accreditVoter" />
         </Dialog>
     </main>
   );

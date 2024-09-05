@@ -1,5 +1,6 @@
 "use client"
 import VotingModal from "@/components/VotingModal";
+import SuccessModal from "@/components/SuccessModal";
 import { useState } from 'react';
 import Link from "next/link";
 import { Web3 } from "web3";
@@ -9,23 +10,27 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 export default function ElectionDetails() {
     const [open, setOpen] = useState(false)
     const [openVote, setOpenVote] = useState(false)
+    const [openSuccess, setOpenSuccess] = useState(false)
     const [votedata, setVoteData] = useState(null)
     const flexedData = [
         {
             img: "./assets/candidate8.avif",
             post: "President",
+            election_id: 1,
             title: "Afolabi Mayowa",
             desc: "The voice of democracy"
         },
         {
             img: "./assets/candidate2.avif",
             post: "President",
+            election_id: 1,
             title: "Ahmad Sulaiman",
             desc: "A vibrant and ever efficient changemaker."
         },
         {
             img: "./assets/candidate3.avif",
             post: "President",
+            election_id: 1,
             title: "Amaka Ugwu",
             desc: "The people's choice"
         }
@@ -34,18 +39,21 @@ export default function ElectionDetails() {
         {
             img: "./assets/candidate9.avif",
             post: "Vice President",
+            election_id: 0,
             title: "Jeniffer Bright",
             desc: "Voice of the people"
         },
         {
             img: "./assets/candidate5.avif",
             post: "Vice President",
+            election_id: 0,
             title: "Adam Nwakwo",
             desc: "A vote for me is a vote for prosperity"
         },
         {
             img: "./assets/candidate10.avif",
             post: "Vice President",
+            election_id: 0,
             title: "Victoria Davis",
             desc: "A woman of her words"
         }
@@ -117,7 +125,14 @@ export default function ElectionDetails() {
 
         {/* modal */}
         <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
-            <VotingModal onCloseModal={() => setOpen(false)} info={votedata} emitVote={handleVote} />
+            <VotingModal onCloseModal={() => setOpen(false)} emitVoteSuccess={() => setOpenSuccess(true)} info={votedata} emitVote={handleVote} />
+        </Dialog>
+        <Dialog
+            open={openSuccess}
+            onClose={() => setOpenSuccess(false)}
+            className="relative z-10"
+        >
+            <SuccessModal btnText="See Live Elections" successMsg="Congratulations! You have successfully voted for your chosen candidate. Be rest assured that your vote counts." routePath="/elections" />
         </Dialog>
     </div>
   );

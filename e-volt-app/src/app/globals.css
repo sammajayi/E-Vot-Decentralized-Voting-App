@@ -146,11 +146,10 @@ a:active{
     /* background-color: red; */
     padding: 1vh 0;
   }
-
-  .nav-links:active {
-    border-bottom: 2px #8F96A1;
-    color: #8F96A1;
-    /* padding-bottom: 2vh; */
+  
+  .nav-links.active a {
+    border-bottom: 2px #5773fb;
+    color: #5773fb;
   }
 
   /* button

@@ -44,11 +44,11 @@ export default function HOME() {
             </div>
         </div>
         <div className="flex items-center justify-center form-item">
-            <img src="./assets/seevolt.png" alt="" />
+            <img src="./assets/e-vot.png" alt="" />
         </div>
         <div className="py-10 px-20 mt-10">
             <div>
-                <p className="text-[32px] font-medium form-item">Welcome To E-Volt</p>
+                <p className="text-[32px] font-medium form-item">Welcome To E-vot</p>
                 <p className=" form-item">Vote to make your voice heard</p>
             </div>
             <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center border rounded-lg p-10 gap-14 mt-10 form-item">

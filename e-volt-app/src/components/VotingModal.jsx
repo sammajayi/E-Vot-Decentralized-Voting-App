@@ -1,14 +1,77 @@
-'use client'
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Web3 } from "web3";
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	DialogTitle,
+} from "@headlessui/react";
+import SuccessModal from "@/components/SuccessModal";
+import { GelatoRelay } from "@gelatonetwork/relay-sdk";
+import { CONTRACT_ABI } from "@/constants/abi";
+import { toast } from "react-toastify";
+import {
+	useWeb3ModalAccount,
+	useWeb3ModalProvider,
+} from "web3modal-web3js/react";
+import { ethers } from "ethers";
 
-import { useState } from 'react';
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+const contractAddress = "0x173A35de308c2B00B19D5102e4068BbD338fAD32"; // Replace with your deployed contract address
 
-export default function VotingModal ({onCloseModal, info, emitVote}) {
+const relay = new GelatoRelay();
+const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
+
+export default function VotingModal ({onCloseModal, info, emitVoteSuccess}) {
     const [loading, setLoading] = useState(false);
     const [voteSuccessful, setVoteSuccessful] = useState(false);
-    const onClose = () => {
-        console.log("here");
-    }
+    const [open, setOpen] = useState(true);
+    const router = useRouter();
+	const { address, chainId, isConnected } = useWeb3ModalAccount();
+	const { walletProvider } = useWeb3ModalProvider();
+    
+    const voteForCandidate = async (e) => {
+        e.preventDefault();
+        if (isConnected) {
+            try {
+                setLoading(true);
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const signer = await provider.getSigner();
+                const user = await signer.getAddress();
+                const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+                const candidateId = ethers.keccak256(ethers.toUtf8Bytes(info.title));
+                const data = await contract.vote.populateTransaction(
+                    info.election_id,
+                    candidateId
+                );
+    
+                const request = {
+                    chainId: (await provider.getNetwork()).chainId,
+                    target: contractAddress,
+                    data: data.data,
+                    user: user,
+                };
+    
+                const relayResponse = await relay.sponsoredCallERC2771(
+                    request,
+                    provider,
+                    GELATO_API
+                );
+    
+                setLoading(false);
+                setVoteSuccessful(true);
+                emitVoteSuccess()
+                console.log("Voted successfully!", relayResponse);
+            } catch (error) {
+                setLoading(false);
+                console.error("Error voting:", error);
+                setVoteSuccessful(false);
+            }   
+        } else {
+            return toast.error("Please connect your wallet");
+        }
+    };
 
     return (
         <>
@@ -30,20 +93,23 @@ export default function VotingModal ({onCloseModal, info, emitVote}) {
                             </DialogTitle>
                             <div className="mt-2">
                                 <p className="text-sm text-gray-500">
-                                {!voteSuccessful ? "Are you sure you want to vote this candidate? Once you confirm your vote,this action cannot be undone." : 'Welldone! Your vote has been successfully registered. Be rest assured that every vote counts, including yours :)'}
+                                Are you sure you want to vote this candidate? Once you confirm your vote,this action cannot be undone.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div> 
-                {!voteSuccessful ? 
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                     type="button"
-                    onClick={() => setVoteSuccessful(true)}
-                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+                    onClick={voteForCandidate}
+                    className="w-full flex items-center justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 min-w-[10vw]"
                 >
-                    {loading ? 'Voting...' : 'Confirm Vote'}
+                    {loading ? <div className="animate-spin h-[30px] rounded-full border-[#fff] border-4 border-b-[#000000] w-[30px] mr-3" viewBox="0 0 24 24">
+                    
+                        </div> : 
+                        <span>Confirm Vote</span>
+                    }
                 </button>
                 {!loading && <button
                     type="button"
@@ -53,18 +119,7 @@ export default function VotingModal ({onCloseModal, info, emitVote}) {
                 >
                     Cancel
                 </button>}
-                </div> : 
-                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button
-                            type="button"
-                            data-autofocus
-                            onClick={onCloseModal}
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-                        >
-                            Return to Dashboard
-                        </button>
-                    </div>
-                }
+                </div>
             </DialogPanel>
             </div>
         </div>

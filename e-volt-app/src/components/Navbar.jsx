@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Web3 from "web3";
 // import { arbitrumSepolia, celo, celoAlfajores, liskSepolia } from "wagmi/chains";
 
@@ -74,6 +75,7 @@ import {
 
 export default function Onboard() {
     const btnRef = useRef(null);
+    const router = useRouter();
 
     const { address, chainId, isConnected } = useWeb3ModalAccount();
     const { walletProvider } = useWeb3ModalProvider();
@@ -83,21 +85,21 @@ export default function Onboard() {
         <header>
             <navbar className="flex h-[10vh] justify-around items-center fixed top-0 right-0 min-w-[100vw] bg-[#ffffff] border-b-2">
             <div className="logo mr-[-10px]">
-                <img src="/assets/Logo.png" alt="logo" />
+                <Link href="/"><img src="/assets/Logo.png" alt="logo" /></Link>
             </div>
 
             <div className="flex ml-20">
                 <ul className="flex gap-16">
-                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="dashboard">
+                <li className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${router.pathname === '/' ? 'active' : ''}`} id="dashboard">
                     <Link className="" href="/">Dashboard</Link>
                 </li>
-                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="elections">
+                <li className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${router.pathname === '/elections' ? 'active' : ''}`} id="elections">
                     <Link className="" href="/elections">Vote</Link>
                 </li>
                 {/* <li className="px-8  nav-linksfont-medium">
                     <Link hre className=""f="/kyc">KYC</Link>
                 </li> */}
-                <li className="px-2 text-[#8F96A1] font-medium target:text-blue-600 hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links" id="addElection">
+                <li className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${router.pathname === '/addElection' ? 'active' : ''}`} id="addElection">
                     <Link className="" href="/addElection">Create Election</Link>
                 </li>
                 </ul>
