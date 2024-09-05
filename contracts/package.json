@@ -2,7 +2,8 @@
   "name": "hardhat-project",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.9"
+    "hardhat": "^2.22.9",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@gelatonetwork/relay-context": "^3.2.0",
