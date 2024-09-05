@@ -80,7 +80,7 @@ const accreditVoter = async (e) => {
     console.log("Voter accredited!", relayResponse);
   } catch (error) {
     setloading(false)
-    return toast.error("Error creating election");
+    return toast.error("Error accrediting voter");
   }
 } else {
   return toast.error("Please connect your wallet");
@@ -144,7 +144,7 @@ const accreditVoter = async (e) => {
 
         {/* voting time */}
         <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
-            <SuccessModal btnText="See All Elections" successMsg="Congratulations! You have successfully accredited a vote to vote in a transparent election" routePath="/elections" />
+            <SuccessModal btnText="See All Elections" successMsg="Congratulations! You have successfully accredited a voter to vote in a transparent election" routePath="/elections" />
         </Dialog>
     </main>
   );
