@@ -18,11 +18,10 @@ import {
 } from "web3modal-web3js/react";
 import { ethers } from "ethers";
 
-const { vars } = require("hardhat/config");
-const GELATO_API = vars.get("NEXT_PUBLIC_GELATO_API_KEY");
 const contractAddress = "0x173A35de308c2B00B19D5102e4068BbD338fAD32"; // Replace with your deployed contract address
 
 const relay = new GelatoRelay();
+const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
 
 export default function VotingModal ({onCloseModal, info, emitVoteSuccess}) {
     const [loading, setLoading] = useState(false);
