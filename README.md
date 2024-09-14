@@ -113,5 +113,5 @@ If you encounter any bugs or issues, please open an issue in the repository with
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Deployment
-The smart contract has been deployed on the Lisk network.
+The smart contract was been deployed on the Lisk network.
 - **Contract Address**: 0x173A35de308c2B00B19D5102e4068BbD338fAD32
