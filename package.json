@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@gelatonetwork/relay-context": "^3.2.0",
-    "@nomicfoundation/hardhat-ignition": "^0.15.5"
+    "@nomicfoundation/hardhat-ignition": "^0.15.5",
+    "dotenv": "^16.4.5"
   }
 }

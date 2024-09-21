@@ -19,7 +19,7 @@ import {
 } from "web3modal-web3js/react";
 import { ethers } from "ethers";
 
-const contractAddress = "0x173A35de308c2B00B19D5102e4068BbD338fAD32";
+const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24";
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
@@ -125,7 +125,7 @@ const addCandidate = async (e) => {
             />
           </div>
 
-          <div class="flex space-x-4 pt-5 ml-2 form-item">
+          <div className="flex space-x-4 pt-5 ml-2 form-item">
             <button onClick={handleGoback} className="border-[#8F95B1] border text-black w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
               Cancel
             </button>
