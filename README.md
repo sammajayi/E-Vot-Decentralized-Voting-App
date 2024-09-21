@@ -55,6 +55,12 @@ The **MultiElectionVoting** smart contract is designed to manage multiple electi
 - **hasUserVoted**
   - `function hasUserVoted(uint256 electionId, address voterAddress) public view returns (bool)`: Checks if a specific voter has voted in a particular election.
 
+
+## contract was deployed to the arb sepolia testnet
+Below is the contract address 
+
+0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24
+
 ## How to Contribute
 
 ### Prerequisites
