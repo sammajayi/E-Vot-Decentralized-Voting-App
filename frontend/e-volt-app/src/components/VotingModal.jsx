@@ -18,7 +18,7 @@ import {
 } from "web3modal-web3js/react";
 import { ethers } from "ethers";
 
-const contractAddress = "0x173A35de308c2B00B19D5102e4068BbD338fAD32"; // Replace with your deployed contract address
+const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24"; // Replace with your deployed contract address
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
