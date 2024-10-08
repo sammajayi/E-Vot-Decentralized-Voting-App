@@ -1,18 +1,12 @@
 "use client"
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Web3 } from "web3";
-import { useWeb3ModalAccount } from "web3modal-web3js/react";
+import { useAccount } from "wagmi";
 
 
 export default function HOME() {
     const router = useRouter()
-    const { address, chainId, isConnected } = useWeb3ModalAccount();
-
-  // check if Metamask is installed
-  // if installed, initialize Web3JS
-  // request user to connect to Metamask
+    const {  isConnected } = useAccount();
 
   const handleCheckConnect =() =>{
     if (isConnected) {
