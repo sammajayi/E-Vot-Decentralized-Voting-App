@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "^0.33.4",
     "@gelatonetwork/relay-sdk": "^5.5.6",
     "@headlessui/react": "^2.1.4",
     "@rainbow-me/rainbowkit": "^2.1.7",
@@ -24,6 +25,7 @@
     "web3modal-web3js": "^0.1.0-alpha.1"
   },
   "devDependencies": {
+    "@types/react": "18.3.11",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.7",

@@ -5,19 +5,13 @@ import { useRouter } from "next/navigation";
 import { Web3 } from "web3";
 import {
 	Dialog,
-	DialogBackdrop,
-	DialogPanel,
-	DialogTitle,
 } from "@headlessui/react";
 import SuccessModal from "@/components/SuccessModal";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "@/constants/abi";
 import { toast } from "react-toastify";
-import {
-	useWeb3ModalAccount,
-	useWeb3ModalProvider,
-} from "web3modal-web3js/react";
 import { ethers } from "ethers";
+import { useAccount } from "wagmi";
 
 const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24";
 
@@ -33,7 +27,7 @@ export default function AccreditVoter() {
 	const [loading, setloading] = useState(false);
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false);
-	const { address, chainId, isConnected } = useWeb3ModalAccount();
+	const { isConnected } = useAccount();
 
 const handleClick = () => {
  const image = document.getElementsByClassName("uploadNIN");
