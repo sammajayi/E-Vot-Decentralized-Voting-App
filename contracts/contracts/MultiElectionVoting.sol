@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
-contract MultiElectionVoting is ERC2771Context {
+contract MultiElectionVoting is ERC2771Context { // gelato: KVDzCx02N26XyRHdgJwNqf5IGfMGtseI6Q6jG61hd8M_
     struct Candidate {
         string name;
         uint256 voteCount;
