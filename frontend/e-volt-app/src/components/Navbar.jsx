@@ -59,7 +59,7 @@ export default function Onboard() {
 							}`}
 							id="addElection"
 						>
-							<Link className="" href="/addElection">
+							<Link className="" href="/votinghistory">
 								Voting History
 							</Link>
 						</li>

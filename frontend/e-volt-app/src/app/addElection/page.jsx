@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 
-const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24"; // Replace with your deployed contract address
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS; // Replace with your deployed contract address
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
@@ -45,6 +45,8 @@ export default function AddElection() {
 			Math.floor(new Date(newElection.startDate).getTime() / 1000),
 			Math.floor(new Date(newElection.endDate).getTime() / 1000)
 			);
+
+			console.log("data", data)
 	
 			const user = await signer.getAddress();
 			const request = {

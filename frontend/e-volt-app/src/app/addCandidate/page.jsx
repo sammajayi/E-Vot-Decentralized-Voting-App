@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 
-const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24";
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
