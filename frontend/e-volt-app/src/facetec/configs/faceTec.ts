@@ -5,8 +5,8 @@ type TFaceTecConfig = {
 };
 
 export const config: TFaceTecConfig = {
-	DeviceKeyIdentifier: process.env.NEXT_PUBLIC_APP_KEY_IDENTIFIER,
-	BaseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
+	DeviceKeyIdentifier: process.env.NEXT_PUBLIC_APP_KEY_IDENTIFIER as string,
+	BaseURL: process.env.NEXT_PUBLIC_APP_BASE_URL as string,
 	PublicFaceScanEncryptionKey:
 		"-----BEGIN PUBLIC KEY-----\n" +
 		"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5PxZ3DLj+zP6T6HFgzzk\n" +

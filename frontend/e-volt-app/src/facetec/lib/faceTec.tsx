@@ -22,10 +22,9 @@ import {
 	FaceTecIDScanResult,
 	FaceTecSessionResult,
 } from "../../../public/core-sdk/FaceTecSDK.js/FaceTecPublicApi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaceTecData } from "../@types/faceTec";
 import { useFaceTecData } from "../context/FacetecContext";
-import { Button } from "@headlessui/react";
 
 type TResult = string | null;
 
@@ -38,38 +37,8 @@ let processor: PhotoIDMatchProcessor;
 let result: TResult = null;
 let IDScanResult: TResult = null;
 let flashUserResult = "";
-let latestSessionResult: FaceTecSessionResult | null = null;
 let latestIDScanResult: FaceTecIDScanResult | null = null;
-
-// if (typeof window !== "undefined") {
-// console.log("Loading*********************************")
-// 	window.onload = function (): void {
-// 	//   console.log(FaceTecSDK)
-// 		FaceTecSDK.setResourceDirectory("/core-sdk/FaceTecSDK.js/resources");
-// 		FaceTecSDK.setImagesDirectory("/core-sdk/FaceTec_images");
-
-// 		FaceTecSDK.initializeInDevelopmentMode(
-// 			config.DeviceKeyIdentifier,
-// 			config.PublicFaceScanEncryptionKey,
-// 			(successful: boolean) => {
-// 				FaceTecSDK.configureLocalization(en);
-
-// 				if (successful) {
-// 					enableAllButtons();
-// 				}
-
-// 				displayStatus(
-// 					FaceTecSDK.getFriendlyDescriptionForFaceTecSDKStatus(
-// 						FaceTecSDK.getStatus()
-// 					)
-// 				);
-// 			}
-// 		);
-
-// 		formatUIForDevice();
-// 	};
-// }
-
+// let latestSessionResult: FaceTecSessionResult | null ;
 declare global {
 	interface Window {
 		FaceTecSDK: typeof TFaceTecSDK;
@@ -230,8 +199,8 @@ export function createOnCompleteHandler(updateFaceTecData: (data: Partial<FaceTe
       latestDocumentData: any
     ): void {
       // Update global variables as in your original code
-      latestSessionResult = sessionResult;
       latestIDScanResult = idScanResult;
+    //   latestSessionResult = sessionResult;
       
       // Update context
   
