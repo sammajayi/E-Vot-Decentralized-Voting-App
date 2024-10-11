@@ -31,11 +31,11 @@ export function ConnectButton() {
 						<Address />
 						<EthBalance />
 					</Identity>
-					<WalletDropdownBasename />
-					<WalletDropdownLink icon="wallet" href="https://keys.coinbase.com">
+					{/* <WalletDropdownBasename /> */}
+					{/* <WalletDropdownLink icon="wallet" href="https://keys.coinbase.com">
 						Wallet
-					</WalletDropdownLink>
-					<WalletDropdownFundLink />
+					</WalletDropdownLink> */}
+					{/* <WalletDropdownFundLink /> */}
 					<WalletDropdownDisconnect />
 				</WalletDropdown>
 			</Wallet>

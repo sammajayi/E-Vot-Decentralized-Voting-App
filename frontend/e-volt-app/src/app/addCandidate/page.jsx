@@ -1,18 +1,20 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import {
-	Dialog,
-
-} from "@headlessui/react";
+import {Dialog} from "@headlessui/react";
 import SuccessModal from "@/components/SuccessModal";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "@/constants/abi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
+import { baseSepolia } from 'wagmi/chains';
+import { switchChain } from '@wagmi/core'
+import { wagmiConfig } from "@/config/wagmi";
+import { GlobalStateContext } from "@/context/GlobalStateContext";
 
-const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24";
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
@@ -22,10 +24,12 @@ const now = new Date();
 export default function AddCandidate() {
   const [newCandidate, setNewCandidate] = useState("");
 	const [electionIdForCandidate, setElectionIdForCandidate] = useState("");
+  const {electionCount} = useContext(GlobalStateContext)
   const [open, setOpen] = useState(false);
 	const [loading, setloading] = useState(false);
   const router = useRouter()
-	const { isConnected } = useAccount();
+  const [isMounted, setIsMounted] = useState(false);
+	const {  isConnected, chainId } = useAccount();
 
 const handleClick = () => {
  const image = document.getElementsByClassName("uploadNIN");
@@ -41,15 +45,48 @@ const handleGoback = () => {
 
 const addCandidate = async (e) => {
   e.preventDefault();
+  setloading(true)
   if(isConnected) {
+    // const provider = new ethers.BrowserProvider(window.ethereum);
+    if (chainId !== baseSepolia.id) {
+      try {
+        await switchChain(wagmiConfig, { chainId: baseSepolia.id })
+      } catch (error) {
+        if (error.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: baseSepolia.id,
+                  chainName: 'Base Sepolia',
+                  nativeCurrency: {
+                    name: 'ETH',
+                    symbol: 'ETH',
+                    decimals: 18,
+                  },
+                  rpcUrls: ['https://sepolia.base.org/'],
+                  blockExplorerUrls: ['https://sepolia-explorer.base.org/'],
+                }
+              ],
+            });
+          } catch (switchError) {
+            console.error('Error adding chain:', switchError);
+            return toast.error('Please add Base Sepolia network to your wallet');
+          }
+        } else {
+          console.error('Error switching chain:', error);
+          return toast.error('Please switch to Base Sepolia network');
+        }
+      }
+    }
     try {
-      setloading(true)
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
   
       const data = await contract.addCandidate.populateTransaction(
-        electionIdForCandidate,
+        electionCount,
         newCandidate
       );
   
@@ -66,9 +103,12 @@ const addCandidate = async (e) => {
         provider,
         GELATO_API
       );
-      setloading(false)
-      setOpen(true)
-      console.log("Candidate added!", relayResponse);
+      if(relayResponse) {
+        setloading(false)
+        setOpen(true)
+      } else {
+        console.log("Error", relayResponse);
+      }
     } catch (error) {
       setloading(false)
       return toast.error("Error adding candidate");
@@ -90,7 +130,7 @@ const addCandidate = async (e) => {
           Fill the input fields below.
         </p>
         <form className="mt-10">
-          <div className=" form-item">
+          {/* <div className=" form-item">
             <label htmlFor="" className="block pb-1.5 font-medium">
               Election ID
             </label>
@@ -102,8 +142,8 @@ const addCandidate = async (e) => {
 					    onChange={(e) => setElectionIdForCandidate(e.target.value)}
               className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
             />
-          </div>
-          <div className=" form-item mt-4">
+          </div> */}
+          <div className=" form-item">
             <label htmlFor="" className="block pb-1.5 font-medium">
               Candidate Name
             </label>
@@ -135,7 +175,7 @@ const addCandidate = async (e) => {
 
         {/* voting time */}
         <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
-            <SuccessModal btnText="Accredit Voter" successMsg="Congratulations! You have successfully added a candidate to contest in a transparent election" routePath="/accreditVoter" />
+            <SuccessModal btnText="View Elections" successMsg="Congratulations! You have successfully added a candidate to contest in a transparent election" routePath="/elections" />
         </Dialog>
     </main>
   );

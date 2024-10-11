@@ -9,6 +9,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { OnchainProviders } from "../providers/OnchainProviders";
 import Script from "next/script";
 import { FaceTecProvider } from "@/facetec/context/FacetecContext";
+import { GlobalStateProvider } from "@/context/GlobalStateContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,12 +33,15 @@ export default function RootLayout({ children }) {
 						<div className="mb-[10vh]">
 							<Navbar />
 						</div>
-						<FaceTecProvider>
-							<ToastContainer />
-							<div className="overflow-scroll pt-[1vh] flex-grow pb-6">
-								{children}
-							</div>
-						</FaceTecProvider>
+						<ToastContainer />
+
+						<GlobalStateProvider>
+							<FaceTecProvider>
+								<div className="overflow-scroll pt-[1vh] flex-grow pb-6">
+									{children}
+								</div>
+							</FaceTecProvider>
+						</GlobalStateProvider>
 						<Footer />
 					</OnchainProviders>
 				</div>

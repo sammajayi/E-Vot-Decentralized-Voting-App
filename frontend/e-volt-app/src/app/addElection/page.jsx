@@ -11,8 +11,11 @@ import { CONTRACT_ABI } from "@/constants/abi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
+import { baseSepolia } from 'wagmi/chains';
+import { switchChain } from '@wagmi/core'
+import { wagmiConfig } from "@/config/wagmi";
 
-const contractAddress = "0xdB148aa6F1B878B55c1155d280dF4f8A07A4DA24"; // Replace with your deployed contract address
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS; // Replace with your deployed contract address
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
@@ -29,47 +32,83 @@ export default function AddElection() {
 		endDate: "",
 	});
 	const router = useRouter();
-	const {  isConnected } = useAccount();
+	const {  isConnected, chainId } = useAccount();
 
 	async function addElection(e) {
 		e.preventDefault();
 		if(isConnected) {
-		try {
-			setloading(true)
-			const provider = new ethers.BrowserProvider(window.ethereum);
-			const signer = await provider.getSigner();
-			const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+			// const provider = new ethers.BrowserProvider(window.ethereum);
+			if (chainId !== baseSepolia.id) {
+				try {
+					await switchChain(wagmiConfig, { chainId: baseSepolia.id })
+				} catch (error) {
+					if (error.code === 4902) {
+						try {
+							await window.ethereum.request({
+								method: 'wallet_addEthereumChain',
+								params: [
+									{
+										chainId: baseSepolia.id,
+										chainName: 'Base Sepolia',
+										nativeCurrency: {
+											name: 'ETH',
+											symbol: 'ETH',
+											decimals: 18,
+										},
+										rpcUrls: ['https://sepolia.base.org/'],
+										blockExplorerUrls: ['https://sepolia-explorer.base.org/'],
+									}
+								],
+							});
+						} catch (switchError) {
+							console.error('Error adding chain:', switchError);
+							return toast.error('Please add Base Sepolia network to your wallet');
+						}
+					} else {
+						console.error('Error switching chain:', error);
+						return toast.error('Please switch to Base Sepolia network');
+					}
+				}
+			}
+			try {
+				setloading(true)
+				const provider = new ethers.BrowserProvider(window.ethereum);
+				const signer = await provider.getSigner();
+				const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+		
+				const data = await contract.createElection.populateTransaction(
+				newElection.title,
+				Math.floor(new Date(newElection.startDate).getTime() / 1000),
+				Math.floor(new Date(newElection.endDate).getTime() / 1000)
+				);
 	
-			const data = await contract.createElection.populateTransaction(
-			newElection.title,
-			Math.floor(new Date(newElection.startDate).getTime() / 1000),
-			Math.floor(new Date(newElection.endDate).getTime() / 1000)
-			);
-	
-			const user = await signer.getAddress();
-			const request = {
-			chainId: (await provider.getNetwork()).chainId,
-			target: contractAddress,
-			data: data.data,
-			user: user,
-			};
-	
-			const relayResponse = await relay.sponsoredCallERC2771(
-			request,
-			provider,
-			GELATO_API
-			);
-			
-
-			setloading(false)
-			setOpen(true)
-			// const txHash = await getTransactionHash(relayResponse);
-			console.log("Election created!", relayResponse);
-		} catch (error) {
-			setloading(false)
-			return toast.error("Error creating election");
-			// console.error("Error creating election:", error);
-		}
+				console.log("data", data)
+		
+				const user = await signer.getAddress();
+				const request = {
+				chainId: (await provider.getNetwork()).chainId,
+				target: contractAddress,
+				data: data.data,
+				user: user,
+				};
+		
+				const relayResponse = await relay.sponsoredCallERC2771(
+				request,
+				provider,
+				GELATO_API
+				);
+				if(relayResponse) {
+					setloading(false)
+					setOpen(true)
+				} else {
+				// const txHash = await getTransactionHash(relayResponse);
+					console.log("Error", relayResponse);
+				}
+			} catch (error) {
+				setloading(false)
+				return toast.error("Error creating election", error);
+				// console.error("Error creating election:", error);
+			}
 		} else {
 		return toast.error("Please connect your wallet");
 		}
@@ -169,15 +208,6 @@ export default function AddElection() {
 					</form>
 				</div>
 			</div>
-
-			{/* success modal*/}
-			<Dialog
-				open={open}
-				onClose={() => setOpen(false)}
-				className="relative z-10"
-			>
-				<SuccessModal btnText="Add a Candidate" successMsg="Congratulations! You have successfully created an election to allow voters vote in a transparent way" routePath="/addCandidate" />
-			</Dialog>
 		</main>
 	);
 }

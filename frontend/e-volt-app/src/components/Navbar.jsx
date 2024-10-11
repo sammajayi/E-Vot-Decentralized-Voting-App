@@ -21,22 +21,20 @@ export default function Onboard() {
 				<div className="flex ml-20">
 					<ul className="flex gap-16">
 						<li
-							className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
-								router.pathname === "/" ? "active" : ""
-							}`}
 							id="dashboard"
 						>
-							<Link className="" href="/">
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+								router.pathname === "/" ? "active" : ""
+							}`} href="/">
 								Home
 							</Link>
 						</li>
 						<li
-							className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
-								router.pathname === "/elections" ? "active" : ""
-							}`}
 							id="elections"
 						>
-							<Link className="" href="/elections">
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+								router.pathname === "/" ? "active" : ""
+							}`} href="/elections">
 								All Elections
 							</Link>
 						</li>
@@ -44,22 +42,20 @@ export default function Onboard() {
                     <Link hre className=""f="/kyc">KYC</Link>
                 </li> */}
 						<li
-							className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
-								router.pathname === "/addElection" ? "active" : ""
-							}`}
 							id="addElection"
 						>
-							<Link className="" href="/addElection">
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+								router.pathname === "/" ? "active" : ""
+							}`} href="/addElection">
 								Create Election
 							</Link>
 						</li>
 						<li
-							className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
-								router.pathname === "/addElection" ? "active" : ""
-							}`}
 							id="addElection"
 						>
-							<Link className="" href="/addElection">
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+								router.pathname === "/" ? "active" : ""
+							}`} href="/votinghistory">
 								Voting History
 							</Link>
 						</li>
