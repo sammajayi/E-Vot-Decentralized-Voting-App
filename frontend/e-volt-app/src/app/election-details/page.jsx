@@ -12,7 +12,7 @@ export default function ElectionDetails() {
     const [open, setOpen] = useState(false)
     const [openVote, setOpenVote] = useState(false)
     const [openSuccess, setOpenSuccess] = useState(false)
-    const {elections, setElections, electionCount} = useContext(GlobalStateContext)
+    const {elections, setElections, electionCount=0} = useContext(GlobalStateContext)
     const [votedata, setVoteData] = useState(null)
     const flexedData = [
         {
@@ -68,6 +68,10 @@ export default function ElectionDetails() {
         setOpenVote(true)
         setVoteData(data)
     }
+
+    console.log(elections)
+
+    if(!elections.length) return <div>Loading...</div>;
   return (
     <div className="py-10 px-20">
         <div className="text-right form-item">
