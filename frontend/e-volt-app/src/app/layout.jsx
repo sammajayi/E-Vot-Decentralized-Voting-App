@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import "@coinbase/onchainkit/styles.css";
 import '@rainbow-me/rainbowkit/styles.css'; 
 import { OnchainProviders } from "../providers/OnchainProviders";
+import { GlobalStateProvider } from "@/context/GlobalStateContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,9 +28,11 @@ export default function RootLayout({ children }) {
 						</div>
 						<ToastContainer />
 
-						<div className="overflow-scroll pt-[1vh] flex-grow pb-6">
-							{children}
-						</div>
+						<GlobalStateProvider>
+							<div className="overflow-scroll pt-[1vh] flex-grow pb-6">
+								{children}
+							</div>
+						</GlobalStateProvider>
 						<Footer />
 					</OnchainProviders>
 				</div>

@@ -1,16 +1,18 @@
 "use client"
 import VotingModal from "@/components/VotingModal";
 import SuccessModal from "@/components/SuccessModal";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Link from "next/link";
 import { Web3 } from "web3";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Dialog } from '@headlessui/react';
+import { GlobalStateContext } from "@/context/GlobalStateContext";
 
 
 export default function ElectionDetails() {
     const [open, setOpen] = useState(false)
     const [openVote, setOpenVote] = useState(false)
     const [openSuccess, setOpenSuccess] = useState(false)
+    const {elections, setElections, electionCount} = useContext(GlobalStateContext)
     const [votedata, setVoteData] = useState(null)
     const flexedData = [
         {
@@ -69,8 +71,8 @@ export default function ElectionDetails() {
   return (
     <div className="py-10 px-20">
         <div className="text-right form-item">
-            <p className="text-[32px] font-medium form-item">Unilag Student Union Representative</p>
-            <p className=" form-item">Election runs from - 1st September to 12th September, 2024</p>
+            <p className="text-[32px] font-medium form-item">{elections[electionCount][0]}</p>
+            <p className=" form-item">Election runs from - {new Date(Number(elections[electionCount][1]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} to {new Date(Number(elections[electionCount][2]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
         </div>
         <div className="flex flex-col flex-wrap justify-between items-left border rounded-lg p-10 gap-14 mt-10 form-item">
         <div className="text-left form-item">

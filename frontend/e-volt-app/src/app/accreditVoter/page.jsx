@@ -1,23 +1,22 @@
 "use client";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { Web3 } from "web3";
-import {
-	Dialog,
-} from "@headlessui/react";
+import {Dialog} from "@headlessui/react";
 import SuccessModal from "@/components/SuccessModal";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "@/constants/abi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
+import { baseSepolia } from 'wagmi/chains';
+import { switchChain } from '@wagmi/core'
+import { wagmiConfig } from "@/config/wagmi";
+import { GlobalStateContext } from "@/context/GlobalStateContext";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 const relay = new GelatoRelay();
 const GELATO_API = process.env.NEXT_PUBLIC_GELATO_API_KEY;
-const now = new Date();
 
 
 export default function AccreditVoter() {
@@ -27,7 +26,8 @@ export default function AccreditVoter() {
 	const [loading, setloading] = useState(false);
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false);
-	const { isConnected } = useAccount();
+	const { isConnected, chainId } = useAccount();
+  const {electionCount} = useContext(GlobalStateContext)
 
 const handleClick = () => {
  const image = document.getElementsByClassName("uploadNIN");
@@ -43,15 +43,48 @@ const handleGoback = () => {
 
 const accreditVoter = async (e) => {
   e.preventDefault()
+  setloading(true)
   if(isConnected) {
+    // const provider = new ethers.BrowserProvider(window.ethereum);
+    if (chainId !== baseSepolia.id) {
+      try {
+        await switchChain(wagmiConfig, { chainId: baseSepolia.id })
+      } catch (error) {
+        if (error.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: baseSepolia.id,
+                  chainName: 'Base Sepolia',
+                  nativeCurrency: {
+                    name: 'ETH',
+                    symbol: 'ETH',
+                    decimals: 18,
+                  },
+                  rpcUrls: ['https://sepolia.base.org/'],
+                  blockExplorerUrls: ['https://sepolia-explorer.base.org/'],
+                }
+              ],
+            });
+          } catch (switchError) {
+            console.error('Error adding chain:', switchError);
+            return toast.error('Please add Base Sepolia network to your wallet');
+          }
+        } else {
+          console.error('Error switching chain:', error);
+          return toast.error('Please switch to Base Sepolia network');
+        }
+      }
+    }
   try {
-    setloading(true)
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
 
     const data = await contract.accreditVoter.populateTransaction(
-      electionIdForVoter,
+      electionCount,
       voterAddress
     );
 
@@ -68,10 +101,13 @@ const accreditVoter = async (e) => {
       provider,
       GELATO_API
     );
-
-    setloading(false)
-    setOpen(true)
-    console.log("Voter accredited!", relayResponse);
+    if(relayResponse) {
+      setloading(false)
+      setOpen(true)
+    } else {
+    // const txHash = await getTransactionHash(relayResponse);
+      console.log("Error", relayResponse);
+    }
   } catch (error) {
     setloading(false)
     return toast.error("Error accrediting voter");
@@ -94,19 +130,6 @@ const accreditVoter = async (e) => {
         </p>
         <form className="mt-10">
           <div className=" form-item">
-            <label htmlFor="" className="block pb-1.5 font-medium">
-              Election ID
-            </label>
-            <input
-              type="text"
-              placeholder="Input election id"
-              id="id"
-              value={electionIdForVoter}
-					    onChange={(e) => setelectionIdForVoter(e.target.value)}
-              className="pt- w-[28rem] pl-5 h-[2.8rem] border-[#8F96A1] border rounded-md"
-            />
-          </div>
-          <div className=" form-item mt-4">
             <label htmlFor="" className="block pb-1.5 font-medium">
               Voter Address
             </label>
