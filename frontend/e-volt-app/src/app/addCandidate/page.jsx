@@ -1,8 +1,6 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Web3 } from "web3";
 import {
 	Dialog,
 
@@ -27,7 +25,6 @@ export default function AddCandidate() {
   const [open, setOpen] = useState(false);
 	const [loading, setloading] = useState(false);
   const router = useRouter()
-  const [isMounted, setIsMounted] = useState(false);
 	const { isConnected } = useAccount();
 
 const handleClick = () => {
