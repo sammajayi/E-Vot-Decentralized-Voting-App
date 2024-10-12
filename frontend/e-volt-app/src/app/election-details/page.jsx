@@ -122,8 +122,8 @@ export default function ElectionDetails() {
   return (
     <div className="py-10 px-20">
         <div className="text-right form-item">
-            <p className="text-[32px] font-medium form-item">{elections[electionCount][0]}</p>
-            <p className=" form-item">Election runs from - {new Date(Number(elections[electionCount][1]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} to {new Date(Number(elections[electionCount][2]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+            <p className="text-[32px] font-medium form-item">{elections && elections[electionCount] ? elections[electionCount][0]: ''}</p>
+            <p className=" form-item">Election runs from - {elections && elections[electionCount] ? new Date(Number(elections[electionCount][1]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }): ''} to {elections && elections[electionCount] ? new Date(Number(elections[electionCount][2]) * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }): ''}</p>
         </div>
         <div className="flex flex-col flex-wrap justify-between items-left border rounded-lg p-10 gap-14 mt-10 form-item">
         <div className="text-left form-item">
