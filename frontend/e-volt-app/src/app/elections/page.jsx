@@ -14,12 +14,12 @@ const multicallAbi = [
 export default function Elections() {
     const router = useRouter()
     const [loading, setLoading] = useState(null);
-	const [open, setOpen] = useState(false);
     const {elections, setElections, setElectionCount} = useContext(GlobalStateContext)
     const { isConnected, isReady } = useWalletConnection();
    
     const handleRoute = (e, index) => {
         e.preventDefault()
+        // const electionId = index + 1
         setElectionCount(index);
         localStorage.setItem('electionCount', Number(index));
         router.push('/election-details')
@@ -27,6 +27,7 @@ export default function Elections() {
 
     const handleAddCandidate = (e, index) => {
         e.preventDefault()
+        // const electionId = index + 1
         setElectionCount(index);
         localStorage.setItem('electionCount', Number(index));
         router.push('/addCandidate')
@@ -34,6 +35,7 @@ export default function Elections() {
 
     const handleAccredit = (e, index) => {
         e.preventDefault()
+        // const electionId = index + 1
         setElectionCount(index);
         localStorage.setItem('electionCount', Number(index));
         router.push('/accreditVoter')

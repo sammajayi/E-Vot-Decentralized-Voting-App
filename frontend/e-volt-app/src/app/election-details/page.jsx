@@ -1,18 +1,22 @@
 "use client"
 import VotingModal from "@/components/VotingModal";
 import SuccessModal from "@/components/SuccessModal";
-import { useState, useContext } from 'react';
-import Link from "next/link";
-import { Web3 } from "web3";
+import { useState, useContext, useEffect, useCallback } from 'react';
+import { CONTRACT_ABI } from "@/constants/abi";
 import { Dialog } from '@headlessui/react';
+import { ethers } from "ethers";
+import { toast } from "react-toastify";
+import useWalletConnection from "@/hooks/useWalletConnection";
 import { GlobalStateContext } from "@/context/GlobalStateContext";
 
 
 export default function ElectionDetails() {
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(null);
     const [openVote, setOpenVote] = useState(false)
     const [openSuccess, setOpenSuccess] = useState(false)
-    const {elections, setElections, electionCount} = useContext(GlobalStateContext)
+    const {elections, setElections, electionCount, setCandidates} = useContext(GlobalStateContext)
+    const { isConnected, isReady } = useWalletConnection();
     const [votedata, setVoteData] = useState(null)
     const flexedData = [
         {
@@ -68,6 +72,53 @@ export default function ElectionDetails() {
         setOpenVote(true)
         setVoteData(data)
     }
+    const fetchCandidates = useCallback(async () => {
+        if (!isReady || !isConnected) return;
+        try {
+            setLoading(true);
+            const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
+            const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+            // const candidateResult = await contract.getCandidates(electionCount);
+            const [candidateIds, names, voteCounts] = await contract.getCandidates(
+				electionCount
+			)
+            if (!candidateIds) return;
+            console.log("candidates", candidateIds, names, voteCounts)
+            const electionCandidates = candidateIds.map((id, index) => ({
+				id: id.toString(), // Convert BigInt to string
+				name: names[index],
+				voteCount: Number(voteCounts[index]), 
+			}));
+            
+            console.log("candidates", electionCandidates)
+            const electionData = {
+				title,
+				startDate: new Date(startDate * 1000).toLocaleDateString(), // Convert UNIX timestamp to date string
+				endDate: new Date(endDate * 1000).toLocaleDateString(), // Convert UNIX timestamp to date string
+				candidateCount,
+				candidates: electionCandidates,
+			};
+
+			setElections(electionData);
+            const candidateData = [...candidateResult].map((data) => {
+                return ({...data});
+            });
+            console.log("candidatesData", candidateData)
+            setCandidates(candidateData);
+            localStorage.setItem('candidates', candidateData);
+        } catch (error) {
+            console.error("Error fetching candidates:", error);
+            toast.error("Error fetching candidates");
+        } finally {
+            setLoading(false);
+        }
+    }, [isReady, isConnected]);
+
+    useEffect(() => {
+        if (isReady && isConnected) {
+            fetchCandidates();
+        }
+    }, [isReady, isConnected, fetchCandidates])
   return (
     <div className="py-10 px-20">
         <div className="text-right form-item">

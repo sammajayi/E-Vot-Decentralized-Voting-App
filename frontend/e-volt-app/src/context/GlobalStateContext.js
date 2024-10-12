@@ -5,6 +5,7 @@ export const GlobalStateContext = createContext();
 
 export const GlobalStateProvider = ({ children }) => {
     const [elections, setElections] = useState([])
+    const [candidates, setCandidates] = useState([])
     const [electionCount, setElectionCount] = useState(0)
 
     // useEffect(() => {
@@ -20,7 +21,7 @@ export const GlobalStateProvider = ({ children }) => {
     //   }, []);
 
     return (
-        <GlobalStateContext.Provider value={{elections, setElections, electionCount, setElectionCount}}>
+        <GlobalStateContext.Provider value={{elections, setElections, electionCount, setElectionCount, candidates, setCandidates}}>
             {children}
         </GlobalStateContext.Provider>
     );
