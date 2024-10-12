@@ -11,6 +11,7 @@ The **MultiElectionVoting** smart contract is designed to manage multiple electi
 - **Voter Accreditation**: Register voters for specific elections, ensuring only accredited voters can participate.
 - **Voting**: Accredited voters can vote for registered candidates within the active election period.
 - **Election Information**: Retrieve details about elections, including the list of candidates and their vote counts.
+- **Voting History**: allows voters to track their voting activities onchain.
 
 ## Contract Structure
 
@@ -65,6 +66,10 @@ The **MultiElectionVoting** smart contract is designed to manage multiple electi
 - Web3.js
 - Next.js
 - Ether.js
+- Onchain Kit
+
+## contract was deployed to  Base
+Here is the contract address **0x170Bbd5A102B995517B133aa6b9275d103B9a120**
 
 ### Steps to Contribute
 
@@ -93,7 +98,7 @@ The **MultiElectionVoting** smart contract is designed to manage multiple electi
 
 6. **Deploy the Contract**: Deploy the contract to your desired Ethereum network (e.g., Mainnet, Ropsten, etc.).
    ```bash
-   npx hardhat run ignition/modules/MultiElectionVoting.ts --network lisk-sepolia
+   npx hardhat run ignition/modules/MultiElectionVoting.ts --network base-sepolia
    ```
 
 7. **Submit a Pull Request**: After making changes, push the changes to your forked repository and create a pull request.
