@@ -12,8 +12,8 @@ import { GlobalStateContext } from "@/context/GlobalStateContext";
 
 export default function ElectionDetails() {
     const [open, setOpen] = useState(false)
-    const [loading, setLoading] = useState(null);
-    const [openVote, setOpenVote] = useState(false)
+    const [setLoading] = useState(null);
+    const [setOpenVote] = useState(false)
     const [openSuccess, setOpenSuccess] = useState(false)
     const {elections, setElections, electionCount, setCandidates} = useContext(GlobalStateContext)
     const { isConnected, isReady } = useWalletConnection();
