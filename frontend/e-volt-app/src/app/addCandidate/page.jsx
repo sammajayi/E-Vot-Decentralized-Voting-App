@@ -121,7 +121,8 @@ console.log({electionCount})
 
 					while (
 						status === "CheckPending" ||
-						status === "WaitingForConfirmation"
+						status === "WaitingForConfirmation" ||
+            status === "ExecPending" 
 					) {
 						try {
 							const response = await fetch(

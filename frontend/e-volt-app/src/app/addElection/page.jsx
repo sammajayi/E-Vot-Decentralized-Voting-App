@@ -109,7 +109,7 @@ export default function AddElection() {
 				async function checkStatus() {
 					let status = "CheckPending";
 
-					while (status === "CheckPending" || status === "WaitingForConfirmation") {
+					while (status === "CheckPending" || status === "WaitingForConfirmation"|| status === "ExecPending" ) {
 						try {
 							const response = await fetch(
 								`https://api.gelato.digital/tasks/status/${relayResponse.taskId}`,

@@ -54,7 +54,7 @@ export default function VotingModal({ onCloseModal, info, emitVoteSuccess }) {
 					info.id
 				);
 
-                console.log({data})
+				console.log({ data });
 
 				const request = {
 					chainId: (await provider.getNetwork()).chainId,
@@ -78,7 +78,11 @@ export default function VotingModal({ onCloseModal, info, emitVoteSuccess }) {
 				async function checkStatus() {
 					let status = "CheckPending";
 
-					while (status === "CheckPending") {
+					while (
+						status === "CheckPending" ||
+						status === "WaitingForConfirmation" ||
+						status === "ExecPending"
+					) {
 						try {
 							const response = await fetch(
 								`https://api.gelato.digital/tasks/status/${relayResponse.taskId}`,
