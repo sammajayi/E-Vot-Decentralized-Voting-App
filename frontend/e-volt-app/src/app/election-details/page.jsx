@@ -157,23 +157,16 @@ export default function ElectionDetails() {
 					</p>
 					{/* <p className=" form-item">Persons contesting for this post:</p> */}
 				</div>
-				<div className="flexed-ctn flex flex-col items-center sm:items-start sm:flex-row sm:gap-2 md:gap-10 gap-0 justify-center ml-auto lg:pl-4 w-full form-item">
+				<div className="flexed-ctn flex flex-col items-center sm:items-center sm:flex-row sm:gap-2 md:gap-10 gap-0 justify-center ml-auto lg:pl-4 w-full form-item">
 					{currentElection?.candidates?.length ? (
 						currentElection?.candidates?.map((data, index) => (
 							<div
 								key={index}
-								className={`group sm:basis-[30%] basis-full min-h-[40vh] bg-[rgb(35,38,39,0.2)] overflow-hidden rounded-l cursor-pointer transition ease-in-out lg:w-auto`}
+								className={`group sm:basis-[30%] basis-full min-h-auto bg-[rgb(35,38,39,0.2)] overflow-hidden rounded-l cursor-pointer transition ease-in-out lg:w-auto flex flex-col items-center justify-center `}
 							>
-								<div
-									className="img-div min-h-[40vh] md:h-[30vh] transition ease-in-out duration-500 opacity-80 group-hover:opacity-100 group-hover:scale-105 bg-contain bg-center sm:bg-cover"
-									style={{
-										backgroundImage: `url(${data.img})`,
-										backgroundRepeat: "no-repeat",
-									}}
-								></div>
-								<div className="stars-ctn flex items-center gap-6 justify-start mb-4 md:my-4 px-6">
+								<div className="stars-ctn flex items-center gap-6 justify-center mb-4 md:my-4 px-6">
 									<div
-										className={`bg-[#01637E20] my-4 md:my-1 px-2 text-[12px] md:text-[12px] text-[#000] font-[NuelisAlt]`}
+										className={`my-4 md:my-1 px-2 text-[32px] md:text-[22px] text-[#000] font-[NuelisAlt]`}
 									>
 										{data.name}
 									</div>

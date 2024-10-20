@@ -135,6 +135,9 @@ console.log({electionCount})
 							const data = await response.json();
 							status = data.task.taskState;
 							console.log({ data });
+							if (data.task.lastCheckMessage && data.task.lastCheckMessage.includes("already started")) {
+								throw new Error("Cant Add Candidates again. Election Already Started")
+							}
 							await delay(5000); // Delay between status checks
 						} catch (error) {
 							console.error("Error fetching status:", error);

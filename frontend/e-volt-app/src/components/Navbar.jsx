@@ -23,7 +23,7 @@ export default function Onboard() {
 						<li
 							id="dashboard"
 						>
-							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] ${
 								router.pathname === "/" ? "active" : ""
 							}`} href="/">
 								Home
@@ -32,19 +32,19 @@ export default function Onboard() {
 						<li
 							id="elections"
 						>
-							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] ${
 								router.pathname === "/" ? "active" : ""
 							}`} href="/elections">
 								All Elections
 							</Link>
 						</li>
-						{/* <li className="px-8  nav-linksfont-medium">
+						{/* <li className="px-8 font-medium">
                     <Link hre className=""f="/kyc">KYC</Link>
                 </li> */}
 						<li
 							id="addElection"
 						>
-							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] ${
 								router.pathname === "/" ? "active" : ""
 							}`} href="/addElection">
 								Create Election
@@ -53,7 +53,7 @@ export default function Onboard() {
 						<li
 							id="addElection"
 						>
-							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] nav-links ${
+							<Link className={`px-2 text-[#8F96A1] font-medium hover:border-b-2 hover:border-[#5773fb] hover:text-[#5773fb] ${
 								router.pathname === "/" ? "active" : ""
 							}`} href="/votinghistory">
 								Voting History
