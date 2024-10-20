@@ -1,18 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-	Dialog,
-
-} from "@headlessui/react";
+import { Dialog } from "@headlessui/react";
 import SuccessModal from "@/components/SuccessModal";
 import { GelatoRelay } from "@gelatonetwork/relay-sdk";
 import { CONTRACT_ABI } from "@/constants/abi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
-import { baseSepolia } from 'wagmi/chains';
-import { switchChain } from '@wagmi/core'
+import { baseSepolia } from "wagmi/chains";
+import { switchChain } from "@wagmi/core";
 import { wagmiConfig } from "@/config/wagmi";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS; // Replace with your deployed contract address
@@ -32,85 +29,126 @@ export default function AddElection() {
 		endDate: "",
 	});
 	const router = useRouter();
-	const {  isConnected, chainId } = useAccount();
+	const { isConnected, chainId } = useAccount();
 
 	async function addElection(e) {
 		e.preventDefault();
-		if(isConnected) {
-			// const provider = new ethers.BrowserProvider(window.ethereum);
+		if (isConnected) {
 			if (chainId !== baseSepolia.id) {
 				try {
-					await switchChain(wagmiConfig, { chainId: baseSepolia.id })
+					await switchChain(wagmiConfig, { chainId: baseSepolia.id });
 				} catch (error) {
 					if (error.code === 4902) {
 						try {
 							await window.ethereum.request({
-								method: 'wallet_addEthereumChain',
+								method: "wallet_addEthereumChain",
 								params: [
 									{
 										chainId: baseSepolia.id,
-										chainName: 'Base Sepolia',
+										chainName: "Base Sepolia",
 										nativeCurrency: {
-											name: 'ETH',
-											symbol: 'ETH',
+											name: "ETH",
+											symbol: "ETH",
 											decimals: 18,
 										},
-										rpcUrls: ['https://sepolia.base.org/'],
-										blockExplorerUrls: ['https://sepolia-explorer.base.org/'],
-									}
+										rpcUrls: ["https://sepolia.base.org/"],
+										blockExplorerUrls: ["https://sepolia-explorer.base.org/"],
+									},
 								],
 							});
 						} catch (switchError) {
-							console.error('Error adding chain:', switchError);
-							return toast.error('Please add Base Sepolia network to your wallet');
+							console.error("Error adding chain:", switchError);
+							return toast.error(
+								"Please add Base Sepolia network to your wallet"
+							);
 						}
 					} else {
-						console.error('Error switching chain:', error);
-						return toast.error('Please switch to Base Sepolia network');
+						console.error("Error switching chain:", error);
+						return toast.error("Please switch to Base Sepolia network");
 					}
 				}
 			}
+
 			try {
-				setloading(true)
+				setloading(true); // Set loading state
 				const provider = new ethers.BrowserProvider(window.ethereum);
 				const signer = await provider.getSigner();
-				const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
-		
-				const data = await contract.createElection.populateTransaction(
-				newElection.title,
-				Math.floor(new Date(newElection.startDate).getTime() / 1000),
-				Math.floor(new Date(newElection.endDate).getTime() / 1000)
+				const contract = new ethers.Contract(
+					contractAddress,
+					CONTRACT_ABI,
+					signer
 				);
-	
-				console.log("data", data)
-		
+
+				const data = await contract.createElection.populateTransaction(
+					newElection.title,
+					Math.floor(new Date(newElection.startDate).getTime() / 1000),
+					Math.floor(new Date(newElection.endDate).getTime() / 1000)
+				);
+
+				console.log("data", data);
+
 				const user = await signer.getAddress();
 				const request = {
-				chainId: (await provider.getNetwork()).chainId,
-				target: contractAddress,
-				data: data.data,
-				user: user,
+					chainId: (await provider.getNetwork()).chainId,
+					target: contractAddress,
+					data: data.data,
+					user: user,
 				};
-		
+
 				const relayResponse = await relay.sponsoredCallERC2771(
-				request,
-				provider,
-				GELATO_API
+					request,
+					provider,
+					GELATO_API
 				);
-				if(relayResponse) {
-					setloading(false)
-					setOpen(true)
-				} else {
-				// const txHash = await getTransactionHash(relayResponse);
-					console.log("Error", relayResponse);
+				console.log({ relayResponse });
+
+				function delay(ms) {
+					return new Promise((resolve) => setTimeout(resolve, ms));
+				}
+
+				async function checkStatus() {
+					let status = "CheckPending";
+
+					while (status === "CheckPending" || status === "WaitingForConfirmation"|| status === "ExecPending" ) {
+						try {
+							const response = await fetch(
+								`https://api.gelato.digital/tasks/status/${relayResponse.taskId}`,
+								{
+									method: "GET",
+									headers: {},
+								}
+							);
+							const data = await response.json();
+							console.log({ data });
+
+							status = data.task.taskState;
+
+							await delay(5000); // Delay for status check
+						} catch (error) {
+							console.error("Error fetching status:", error);
+							throw new Error("Failed to check status, please try again.");
+						}
+					}
+
+					if (status === "ExecSuccess") {
+						toast.success("Election created successfully");
+						setOpen(true);
+					} else {
+						throw new Error("Error creating election");
+					}
+				}
+
+				if (relayResponse) {
+					await checkStatus();
 				}
 			} catch (error) {
-				setloading(false)
-				return toast.error("Error creating election", error);
-				// console.error("Error creating election:", error);
+				console.error("Error creating election:", error);
+				toast.error(error.message || "Error creating election");
+			} finally {
+				setloading(false); // Ensure loading state is cleared regardless of success or failure
 			}
 		} else {
-		return toast.error("Please connect your wallet");
+			toast.error("Please connect your wallet");
 		}
 	}
 
@@ -198,11 +236,14 @@ export default function AddElection() {
 								onClick={addElection}
 								className="bg-[#5773fb] text-white w-[12.9rem] h-[2.6rem] rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 flex items-center justify-center"
 							>
-								{loading ? <div className="animate-spin h-[30px] rounded-full border-[#fff] border-4 border-b-[#000000] w-[30px] mr-3" viewBox="0 0 24 24">
-								
-								</div> : 
-								<span>Proceed</span>
-								}
+								{loading ? (
+									<div
+										className="animate-spin h-[30px] rounded-full border-[#fff] border-4 border-b-[#000000] w-[30px] mr-3"
+										viewBox="0 0 24 24"
+									></div>
+								) : (
+									<span>Proceed</span>
+								)}
 							</button>
 						</div>
 					</form>

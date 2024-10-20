@@ -1,6 +1,6 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-const trustedForwarder = "0x941D860B7f971D5b52b1CDb3793f02C18704FDD2"
+const trustedForwarder = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c"
 
 const MultiElectionVotingModule = buildModule("MultiElectionVotingModule", (m) => {
 

@@ -3,7 +3,9 @@ pragma solidity ^0.8.17;
 
 import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
-contract MultiElectionVoting is ERC2771Context { // gelato: KVDzCx02N26XyRHdgJwNqf5IGfMGtseI6Q6jG61hd8M_
+contract MultiElectionVoting is
+    ERC2771Context // gelato: KVDzCx02N26XyRHdgJwNqf5IGfMGtseI6Q6jG61hd8M_
+{
     struct Candidate {
         string name;
         uint256 voteCount;
@@ -35,7 +37,7 @@ contract MultiElectionVoting is ERC2771Context { // gelato: KVDzCx02N26XyRHdgJwN
         uint256 endDate
     );
     event CandidateAdded(uint256 electionId, bytes32 candidateId, string name);
-    event VoterAccredited(uint256 electionId, address voter);
+    event VoterAccredited(uint256 electionId, address voter, address caller);
     event Voted(uint256 electionId, address voter, bytes32 candidateId);
 
     constructor(address trustedForwarder) ERC2771Context(trustedForwarder) {}
@@ -99,7 +101,7 @@ contract MultiElectionVoting is ERC2771Context { // gelato: KVDzCx02N26XyRHdgJwN
             .accreditedVoters[voterAddress]
             .isRegistered = true;
 
-        emit VoterAccredited(electionId, voterAddress);
+        emit VoterAccredited(electionId, voterAddress, _msgSender());
     }
 
     function vote(uint256 electionId, bytes32 candidateId) public {
@@ -108,7 +110,7 @@ contract MultiElectionVoting is ERC2771Context { // gelato: KVDzCx02N26XyRHdgJwN
             elections[electionId].accreditedVoters[voter].isRegistered,
             "Voter is not accredited for this election"
         );
-        
+
         // require(
         //     !voters[voter].hasVoted[electionId],
         //     "Voter has already voted in this election"
