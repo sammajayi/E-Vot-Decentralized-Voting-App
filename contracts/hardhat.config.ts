@@ -16,31 +16,21 @@ const config: HardhatUserConfig = {
     // },
     'base-sepolia': {
       url: 'https://sepolia.base.org',
-      accounts: [process.env.ACCOUNT_PRIVATE_KEY!],
+      accounts: [process.env.PRIVATE_KEY!],
       gasPrice: 1000000000,
     },
   },
   etherscan: {
-    apiKey: {
-      // "arbitrum-sepolia": process.env.ARBISCAN_API_KEY!,
-      "base-sepolia": process.env.BASESCAN_API_KEY!
-    },
+    apiKey:
+      process.env.BASESCAN_API_KEY || "Z597QN9XS29338DPDQIAHT83A42M3933P5",
     customChains: [
-      // {
-      //   network: "arbitrum-sepolia",
-      //   chainId: 421614,
-      //   urls: {
-      //       apiURL: "https://api-sepolia.arbiscan.io/api",
-      //       browserURL: "https://sepolia.arbiscan.io/",
-      //   },
-      // },
       {
         network: "base-sepolia",
         chainId: 84532,
         urls: {
-         apiURL: "https://api-sepolia.basescan.org/api",
-         browserURL: "https://sepolia.basescan.org"
-        }
+          apiURL: "https://api-sepolia.basescan.org/api",
+          browserURL: "https://sepolia.basescan.org",
+        },
       },
     ],
   },
